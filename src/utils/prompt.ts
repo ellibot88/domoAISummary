@@ -43,7 +43,7 @@ export function buildSummaryPrompt(
   const datasetDescriptions = datasets
     .map((ds) => {
       const colList = ds.columns.map((c) => `${c.name} (${c.type})`).join(', ');
-      const sampleJson = JSON.stringify(ds.sampleRows.slice(0, 5), null, 2);
+      const sampleJson = JSON.stringify(ds.sampleRows.slice(0, 3), null, 2);
 
       let aggSection = '';
       if (ds.aggregates && Object.keys(ds.aggregates).length > 0) {
@@ -78,7 +78,7 @@ ${sampleJson}${aggSection}`;
   let cardRenderSection = '';
   if (cardRenders && cardRenders.length > 0) {
     const cardDescriptions = cardRenders
-      .filter((cr) => cr.success && cr.tableSummary)
+      .filter((cr) => cr.success && cr.tableSummary && cr.tableSummary.dataQuality !== 'EMPTY_RESULT')
       .map((cr) => {
         const ts = cr.tableSummary!;
         const colList = ts.columns.join(', ');

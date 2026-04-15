@@ -116,7 +116,12 @@ const NUMERIC_TYPES = new Set([
 export async function sampleAllDatasets(
   datasets: PageDataset[]
 ): Promise<DatasetSample[]> {
-  const limited = datasets.slice(0, MAX_DATASETS);
+  // Filter out config/system datasets that aren't actual data
+  const dataOnly = datasets.filter((ds) => {
+    const lower = ds.name.toLowerCase();
+    return !lower.includes('ai summary config') && !lower.includes('aiconfig');
+  });
+  const limited = dataOnly.slice(0, MAX_DATASETS);
 
   const results = await Promise.allSettled(
     limited.map(async (ds) => {
