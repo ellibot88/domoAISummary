@@ -1,0 +1,153 @@
+{
+  "name": "Dashboard Discovery",
+  "description": "Server-side functions for discovering datasets, cards, and querying data on Domo pages",
+  "language": "JAVASCRIPT",
+  "environment": "LAMBDA",
+  "manifest": {
+    "functions": [
+      {
+        "name": "getPageDatasets",
+        "displayName": "Get Page Datasets",
+        "description": "Get all datasets used on a Domo page",
+        "inputs": [],
+        "parameters": [
+          {
+            "name": "pageId",
+            "displayName": "pageId",
+            "type": "text",
+            "dataType": "text",
+            "value": null,
+            "nullable": false,
+            "isList": false,
+            "children": [],
+            "entitySubType": null,
+            "alias": "pageId"
+          }
+        ],
+        "output": {
+          "name": "result",
+          "displayName": "result",
+          "type": "object",
+          "dataType": "object",
+          "value": null,
+          "nullable": false,
+          "isList": false,
+          "children": [],
+          "entitySubType": null,
+          "alias": "result"
+        }
+      },
+      {
+        "name": "getPageCards",
+        "displayName": "Get Page Cards",
+        "description": "Get all cards on a Domo page",
+        "inputs": [],
+        "parameters": [
+          {
+            "name": "pageId",
+            "displayName": "pageId",
+            "type": "text",
+            "dataType": "text",
+            "value": null,
+            "nullable": false,
+            "isList": false,
+            "children": [],
+            "entitySubType": null,
+            "alias": "pageId"
+          }
+        ],
+        "output": {
+          "name": "result",
+          "displayName": "result",
+          "type": "object",
+          "dataType": "object",
+          "value": null,
+          "nullable": false,
+          "isList": false,
+          "children": [],
+          "entitySubType": null,
+          "alias": "result"
+        }
+      },
+      {
+        "name": "getDatasetSchema",
+        "displayName": "Get Dataset Schema",
+        "description": "Get column schema for a dataset",
+        "inputs": [],
+        "parameters": [
+          {
+            "name": "datasetId",
+            "displayName": "datasetId",
+            "type": "text",
+            "dataType": "text",
+            "value": null,
+            "nullable": false,
+            "isList": false,
+            "children": [],
+            "entitySubType": null,
+            "alias": "datasetId"
+          }
+        ],
+        "output": {
+          "name": "result",
+          "displayName": "result",
+          "type": "object",
+          "dataType": "object",
+          "value": null,
+          "nullable": false,
+          "isList": false,
+          "children": [],
+          "entitySubType": null,
+          "alias": "result"
+        }
+      },
+      {
+        "name": "queryDataset",
+        "displayName": "Query Dataset",
+        "description": "Execute SQL query against a dataset",
+        "inputs": [],
+        "parameters": [
+          {
+            "name": "datasetId",
+            "displayName": "datasetId",
+            "type": "text",
+            "dataType": "text",
+            "value": null,
+            "nullable": false,
+            "isList": false,
+            "children": [],
+            "entitySubType": null,
+            "alias": "datasetId"
+          },
+          {
+            "name": "sql",
+            "displayName": "sql",
+            "type": "text",
+            "dataType": "text",
+            "value": null,
+            "nullable": false,
+            "isList": false,
+            "children": [],
+            "entitySubType": null,
+            "alias": "sql"
+          }
+        ],
+        "output": {
+          "name": "result",
+          "displayName": "result",
+          "type": "object",
+          "dataType": "object",
+          "value": null,
+          "nullable": false,
+          "isList": false,
+          "children": [],
+          "entitySubType": null,
+          "alias": "result"
+        }
+      }
+    ],
+    "configuration": {
+      "accountsMapping": []
+    }
+  }
+}

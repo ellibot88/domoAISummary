@@ -1,0 +1,154 @@
+{
+  "name": "Dashboard Discovery",
+  "description": "Server-side functions for discovering datasets, cards, and querying data on Domo pages",
+  "language": "JAVASCRIPT",
+  "environment": "LAMBDA",
+  "manifest": {
+    "functions": [
+      {
+        "name": "getPageDatasets",
+        "displayName": "Get Page Datasets",
+        "description": "Get all datasets used on a Domo page",
+        "inputs": [],
+        "parameters": [
+          {
+            "name": "pageId",
+            "displayName": "pageId",
+            "type": "text",
+            "dataType": "text",
+            "value": null,
+            "nullable": false,
+            "isList": false,
+            "children": [],
+            "entitySubType": null,
+            "alias": "pageId"
+          }
+        ],
+        "output": {
+          "name": "result",
+          "displayName": "result",
+          "type": "object",
+          "dataType": "object",
+          "value": null,
+          "nullable": false,
+          "isList": false,
+          "children": [],
+          "entitySubType": null,
+          "alias": "result"
+        }
+      },
+      {
+        "name": "getPageCards",
+        "displayName": "Get Page Cards",
+        "description": "Get all cards on a Domo page",
+        "inputs": [],
+        "parameters": [
+          {
+            "name": "pageId",
+            "displayName": "pageId",
+            "type": "text",
+            "dataType": "text",
+            "value": null,
+            "nullable": false,
+            "isList": false,
+            "children": [],
+            "entitySubType": null,
+            "alias": "pageId"
+          }
+        ],
+        "output": {
+          "name": "result",
+          "displayName": "result",
+          "type": "object",
+          "dataType": "object",
+          "value": null,
+          "nullable": false,
+          "isList": false,
+          "children": [],
+          "entitySubType": null,
+          "alias": "result"
+        }
+      },
+      {
+        "name": "getDatasetSchema",
+        "displayName": "Get Dataset Schema",
+        "description": "Get column schema for a dataset",
+        "inputs": [],
+        "parameters": [
+          {
+            "name": "datasetId",
+            "displayName": "datasetId",
+            "type": "text",
+            "dataType": "text",
+            "value": null,
+            "nullable": false,
+            "isList": false,
+            "children": [],
+            "entitySubType": null,
+            "alias": "datasetId"
+          }
+        ],
+        "output": {
+          "name": "result",
+          "displayName": "result",
+          "type": "object",
+          "dataType": "object",
+          "value": null,
+          "nullable": false,
+          "isList": false,
+          "children": [],
+          "entitySubType": null,
+          "alias": "result"
+        }
+      },
+      {
+        "name": "queryDataset",
+        "displayName": "Query Dataset",
+        "description": "Execute SQL query against a dataset",
+        "inputs": [],
+        "parameters": [
+          {
+            "name": "datasetId",
+            "displayName": "datasetId",
+            "type": "text",
+            "dataType": "text",
+            "value": null,
+            "nullable": false,
+            "isList": false,
+            "children": [],
+            "entitySubType": null,
+            "alias": "datasetId"
+          },
+          {
+            "name": "sql",
+            "displayName": "sql",
+            "type": "text",
+            "dataType": "text",
+            "value": null,
+            "nullable": false,
+            "isList": false,
+            "children": [],
+            "entitySubType": null,
+            "alias": "sql"
+          }
+        ],
+        "output": {
+          "name": "result",
+          "displayName": "result",
+          "type": "object",
+          "dataType": "object",
+          "value": null,
+          "nullable": false,
+          "isList": false,
+          "children": [],
+          "entitySubType": null,
+          "alias": "result"
+        }
+      }
+    ],
+    "configuration": {
+      "accountsMapping": []
+    }
+  },
+  "code": "const codeengine = require('codeengine');\n\nasync function sendRequest(method, url, body) {\n  const res = await codeengine.sendRequest(method, url, body);\n  if (res.status >= 400) {\n    throw new Error(`${method} ${url}: ${res.status} - ${res.body}`);\n  }\n  return res.body ? JSON.parse(res.body) : null;\n}\n\n/**\n * Get all datasets used on a given Domo page.\n * @param {string} pageId - The Domo page ID\n * @returns {object} - { datasets: [{ id, name, description, rows }] }\n */\nasync function getPageDatasets(pageId) {\n  if (!pageId) throw new Error('pageId is required');\n\n  const data = await sendRequest('GET', `/api/content/v1/datasources/pages/${pageId}`);\n  const sources = data?.dataSources || [];\n\n  return {\n    datasets: sources.map(ds => ({\n      id: String(ds.id),\n      name: ds.name || ds.displayName || `Dataset ${ds.id}`,\n      description: ds.description || '',\n      rows: ds.rows || ds.rowCount || 0,\n    })),\n  };\n}\n\n/**\n * Get all cards on a given Domo page.\n * @param {string} pageId - The Domo page ID\n * @returns {object} - { cards: [{ id, title, type }] }\n */\nasync function getPageCards(pageId) {\n  if (!pageId) throw new Error('pageId is required');\n\n  const data = await sendRequest('GET', `/api/content/v3/stacks/${pageId}/cards`);\n  const cards = data?.cards || [];\n\n  return {\n    cards: cards\n      .filter(c => c.id != null)\n      .map(c => ({\n        id: Number(c.id),\n        title: c.title || c.name || `Card ${c.id}`,\n        type: c.type || c.chartType || '',\n      })),\n  };\n}\n\n/**\n * Get schema (columns) for a dataset.\n * @param {string} datasetId - The dataset UUID\n * @returns {object} - { columns: [{ name, type }] }\n */\nasync function getDatasetSchema(datasetId) {\n  if (!datasetId) throw new Error('datasetId is required');\n\n  const data = await sendRequest('GET', `/api/data/v3/datasources/${datasetId}?part=columns`);\n  const columns = data?.columns || data?.schemas?.[0]?.columns || [];\n\n  return {\n    columns: columns.map(col => ({\n      name: col.name || col.columnName || '',\n      type: col.type || 'STRING',\n    })),\n  };\n}\n\n/**\n * Execute a SQL query against a dataset and return results.\n * @param {string} datasetId - The dataset UUID\n * @param {string} sql - The SQL query to execute\n * @returns {object} - { columns: string[], rows: any[][], numRows: number }\n */\nasync function queryDataset(datasetId, sql) {\n  if (!datasetId) throw new Error('datasetId is required');\n  if (!sql) throw new Error('sql is required');\n\n  const data = await sendRequest('POST', `/api/query/v1/execute/${datasetId}`, { sql });\n\n  return {\n    columns: data?.columns || [],\n    rows: data?.rows || [],\n    numRows: data?.numRows || (data?.rows?.length ?? 0),\n  };\n}\n\nmodule.exports = { getPageDatasets, getPageCards, getDatasetSchema, queryDataset };\n"
+}
