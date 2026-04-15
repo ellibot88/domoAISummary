@@ -59,7 +59,7 @@
     {
       "name": "Dashboard Discovery",
       "alias": "getPageDatasets",
-      "packageId": "d2032d70-bba4-4e5b-a729-4f9657d6e472",
+      "packageId": "3c7f3839-a76f-42fd-95d0-32182aa1262e",
       "version": "1.0.4",
       "functionName": "getPageDatasets",
       "parameters": [
@@ -90,7 +90,7 @@
     {
       "name": "Dashboard Discovery",
       "alias": "getPageCards",
-      "packageId": "d2032d70-bba4-4e5b-a729-4f9657d6e472",
+      "packageId": "3c7f3839-a76f-42fd-95d0-32182aa1262e",
       "version": "1.0.4",
       "functionName": "getPageCards",
       "parameters": [
@@ -121,7 +121,7 @@
     {
       "name": "Dashboard Discovery",
       "alias": "getDatasetSchema",
-      "packageId": "d2032d70-bba4-4e5b-a729-4f9657d6e472",
+      "packageId": "3c7f3839-a76f-42fd-95d0-32182aa1262e",
       "version": "1.0.4",
       "functionName": "getDatasetSchema",
       "parameters": [
@@ -152,7 +152,7 @@
     {
       "name": "Dashboard Discovery",
       "alias": "queryDataset",
-      "packageId": "d2032d70-bba4-4e5b-a729-4f9657d6e472",
+      "packageId": "3c7f3839-a76f-42fd-95d0-32182aa1262e",
       "version": "1.0.4",
       "functionName": "queryDataset",
       "parameters": [
@@ -194,7 +194,7 @@
     {
       "name": "Dashboard Discovery",
       "alias": "getFilesetContent",
-      "packageId": "d2032d70-bba4-4e5b-a729-4f9657d6e472",
+      "packageId": "3c7f3839-a76f-42fd-95d0-32182aa1262e",
       "version": "1.0.4",
       "functionName": "getFilesetContent",
       "parameters": [
@@ -256,6 +256,6 @@
       }
     }
   ],
-  "id": "a017253d-c7fb-4565-9d45-7bafeb470b79",
+  "id": "09482694-4429-48fa-a220-ca4dcd02b916",
   "fileName": "manifest.json"
 }
