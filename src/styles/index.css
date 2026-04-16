@@ -131,16 +131,6 @@ body {
   white-space: nowrap;
 }
 
-.cache-info {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--text-secondary);
-  font-size: 11px;
-  font-weight: 400;
-  white-space: nowrap;
-}
-
 .icon-btn {
   display: flex;
   align-items: center;
@@ -248,7 +238,7 @@ body {
 }
 
 .summary-body p {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.7;
   font-weight: 400;
   color: var(--text-primary);
@@ -267,7 +257,7 @@ body {
 }
 
 .summary-body ul li {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.7;
   font-weight: 400;
   color: var(--text-primary);
@@ -289,6 +279,55 @@ body {
 .summary-body strong {
   font-weight: 600;
   color: var(--text-primary);
+}
+
+/* === Bullet Copy Button === */
+.bullet-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.bullet-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+  border: none;
+  border-radius: var(--radius-badge);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  opacity: 0;
+  transition-property: opacity, background-color, color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+
+.bullet-item:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.copy-btn:active {
+  scale: 0.92;
+}
+
+.copy-btn-success {
+  opacity: 1;
+  color: var(--on-track-text);
 }
 
 /* === Chart Grid === */
@@ -357,8 +396,16 @@ body {
   padding: 20px;
 }
 
-/* === Follow-Up Bar === */
-.followup-bar {
+/* === Cache Footer === */
+.cache-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 0 4px 0;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 400;
   flex-shrink: 0;
 }
 

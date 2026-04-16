@@ -1,13 +1,13 @@
 {
   "name": "Dashboard Summary",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "size": {
     "width": 4,
     "height": 4
   },
   "datasetsMapping": [
     {
-      "dataSetId": "062c51d3-3901-4add-9d2a-c2905dc907a9",
+      "dataSetId": "8face10c-adcd-4d6d-a7cb-90aea256c7bb",
       "alias": "aiConfig",
       "fields": []
     }
@@ -59,8 +59,8 @@
     {
       "name": "Dashboard Discovery",
       "alias": "getPageDatasets",
-      "packageId": "56837ee8-b7c5-4b52-b78c-b2d756f111f8",
-      "version": "1.0.0",
+      "packageId": "d2032d70-bba4-4e5b-a729-4f9657d6e472",
+      "version": "1.0.4",
       "functionName": "getPageDatasets",
       "parameters": [
         {
@@ -90,8 +90,8 @@
     {
       "name": "Dashboard Discovery",
       "alias": "getPageCards",
-      "packageId": "56837ee8-b7c5-4b52-b78c-b2d756f111f8",
-      "version": "1.0.0",
+      "packageId": "d2032d70-bba4-4e5b-a729-4f9657d6e472",
+      "version": "1.0.4",
       "functionName": "getPageCards",
       "parameters": [
         {
@@ -121,8 +121,8 @@
     {
       "name": "Dashboard Discovery",
       "alias": "getDatasetSchema",
-      "packageId": "56837ee8-b7c5-4b52-b78c-b2d756f111f8",
-      "version": "1.0.0",
+      "packageId": "d2032d70-bba4-4e5b-a729-4f9657d6e472",
+      "version": "1.0.4",
       "functionName": "getDatasetSchema",
       "parameters": [
         {
@@ -152,8 +152,8 @@
     {
       "name": "Dashboard Discovery",
       "alias": "queryDataset",
-      "packageId": "56837ee8-b7c5-4b52-b78c-b2d756f111f8",
-      "version": "1.0.0",
+      "packageId": "d2032d70-bba4-4e5b-a729-4f9657d6e472",
+      "version": "1.0.4",
       "functionName": "queryDataset",
       "parameters": [
         {
@@ -194,8 +194,8 @@
     {
       "name": "Dashboard Discovery",
       "alias": "getFilesetContent",
-      "packageId": "56837ee8-b7c5-4b52-b78c-b2d756f111f8",
-      "version": "1.0.0",
+      "packageId": "d2032d70-bba4-4e5b-a729-4f9657d6e472",
+      "version": "1.0.4",
       "functionName": "getFilesetContent",
       "parameters": [
         {
@@ -225,8 +225,8 @@
     {
       "name": "Dashboard Card Data Queries",
       "alias": "getPageTableSummaries",
-      "packageId": "d37bf465-a03c-44d0-a0ac-f2adafb95e41",
-      "version": "1.0.0",
+      "packageId": "5d11a9b8-266b-4438-9bb0-30c365a4bb83",
+      "version": null,
       "functionName": "getPageTableSummaries",
       "parameters": [
         {
@@ -256,6 +256,6 @@
       }
     }
   ],
-  "fileName": "manifest.json",
-  "id": "9ed8479e-2cb7-4310-9ebd-15a26d61cc43"
+  "id": "09482694-4429-48fa-a220-ca4dcd02b916",
+  "fileName": "manifest.json"
 }

@@ -1,6 +1,6 @@
 {
   "name": "Dashboard Summary",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "size": {
     "width": 4,
     "height": 4
@@ -256,6 +256,6 @@
       }
     }
   ],
-  "id": "a017253d-c7fb-4565-9d45-7bafeb470b79",
+  "id": "09482694-4429-48fa-a220-ca4dcd02b916",
   "fileName": "manifest.json"
 }

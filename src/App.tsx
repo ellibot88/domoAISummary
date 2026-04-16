@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { RefreshCw, MessageSquare, Clock, User } from 'lucide-react';
+
 import { useDashboardSummary } from './hooks/useDashboardSummary';
 import LoadingState from './components/LoadingState';
 import ErrorBanner from './components/ErrorBanner';
@@ -68,14 +69,13 @@ export default function App() {
           )}
         </div>
         <div className="header-right">
-          {cacheDate && (
-            <span className="cache-info">
-              <Clock size={12} />
-              {fromCache ? 'Cached' : 'Generated'} {formatCacheDate(cacheDate)}
-            </span>
-          )}
-          <button className="icon-btn" onClick={regenerate} title="Regenerate summary">
+          <button className="followup-btn" onClick={() => setModalOpen(true)}>
+            <MessageSquare size={16} />
+            Ask a Question
+          </button>
+          <button className="followup-btn" onClick={regenerate}>
             <RefreshCw size={16} />
+            New Summary
           </button>
         </div>
       </div>
@@ -89,17 +89,13 @@ export default function App() {
       {/* KPI strip */}
       <KpiStrip kpis={summary.kpis} />
 
-      {/* Action buttons */}
-      <div className="followup-bar">
-        <button className="followup-btn" onClick={() => setModalOpen(true)}>
-          <MessageSquare size={16} />
-          Ask a Question
-        </button>
-        <button className="followup-btn" onClick={regenerate}>
-          <RefreshCw size={16} />
-          New Summary
-        </button>
-      </div>
+      {/* Cache timestamp footer */}
+      {cacheDate && (
+        <div className="cache-footer">
+          <Clock size={12} />
+          Summary generated {formatCacheDate(cacheDate)}
+        </div>
+      )}
 
       {/* Follow-up modal */}
       <FollowUpModal
