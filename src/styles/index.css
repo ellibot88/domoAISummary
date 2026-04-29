@@ -261,19 +261,24 @@ body {
   line-height: 1.7;
   font-weight: 400;
   color: var(--text-primary);
-  padding: 4px 0 4px 20px;
+  padding: 4px 0 4px 24px;
   position: relative;
 }
 
 .summary-body ul li::before {
   content: '';
   position: absolute;
-  left: 4px;
+  left: 8px;
   top: 13px;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--accent);
+  transition: opacity 120ms ease-out;
+}
+
+.summary-body ul li.bullet-item:hover::before {
+  opacity: 0;
 }
 
 .summary-body strong {
@@ -294,19 +299,22 @@ body {
 }
 
 .copy-btn {
-  flex-shrink: 0;
+  position: absolute;
+  left: -2px;
+  top: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  margin-top: 2px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
   border: none;
   border-radius: var(--radius-badge);
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
   opacity: 0;
+  pointer-events: none;
   transition-property: opacity, background-color, color;
   transition-duration: 150ms;
   transition-timing-function: ease-out;
@@ -314,6 +322,7 @@ body {
 
 .bullet-item:hover .copy-btn {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .copy-btn:hover {
@@ -328,6 +337,69 @@ body {
 .copy-btn-success {
   opacity: 1;
   color: var(--on-track-text);
+}
+
+.explain-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+  border: none;
+  border-radius: var(--radius-badge);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  opacity: 0.4;
+  transition-property: opacity, background-color, color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+
+.bullet-item:hover .explain-btn {
+  opacity: 1;
+}
+
+.explain-btn:hover {
+  background: var(--hover-bg);
+  color: var(--accent-text);
+}
+
+.explain-btn:active {
+  scale: 0.92;
+}
+
+.explain-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.explain-tooltip {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 10;
+  padding: 6px 10px;
+  border-radius: var(--radius-badge);
+  background: var(--text-primary);
+  color: white;
+  font-size: 12px;
+  white-space: nowrap;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.explain-wrap:hover .explain-tooltip,
+.explain-btn:focus-visible + .explain-tooltip {
+  opacity: 1;
 }
 
 /* === Chart Grid === */
@@ -625,25 +697,66 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
   padding: 24px;
 }
 
-.loading-spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid var(--border-light);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+.thinking-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  animation: thinking-fade 300ms ease-out;
 }
 
-.loading-text {
-  font-size: 13px;
-  font-weight: 400;
+.thinking-icon {
+  color: var(--accent-text);
+  animation: thinking-pulse 1.6s ease-in-out infinite;
+}
+
+.thinking-verb {
+  font-variant-numeric: tabular-nums;
+}
+
+.thinking-elapsed {
   color: var(--text-secondary);
-  text-align: center;
-  text-wrap: pretty;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes thinking-fade {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes thinking-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.12); }
+}
+
+/* === Streaming Caret === */
+.stream-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--accent-text);
+  animation: caret-blink 1s steps(2, start) infinite;
+}
+
+.summary-body-streaming p:last-of-type,
+.summary-body-streaming ul:last-of-type li:last-of-type .bullet-text {
+  /* keep caret visually attached to the trailing content */
+}
+
+@keyframes caret-blink {
+  to { visibility: hidden; }
 }
 
 /* === Error Banner === */

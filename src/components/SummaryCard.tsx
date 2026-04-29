@@ -1,9 +1,15 @@
-import { useState } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Copy, Check, Info } from 'lucide-react';
+import domo from 'ryuu.js';
+import type { CardRenderResult } from '../types';
 
 interface Props {
   narrative: string;
+  stream?: boolean;
+  cardRenders?: CardRenderResult[];
 }
+
+const SOURCE_TAG_REGEX = /\s*\[source:(\d+)\]\s*$/;
 
 function copyToClipboard(text: string): boolean {
   try {
@@ -25,7 +31,6 @@ function copyToClipboard(text: string): boolean {
 
 /** Convert **bold** markdown and bullet points to HTML */
 function renderLine(text: string): JSX.Element {
-  // Split on **bold** markers and alternate between plain and bold spans
   const parts = text.split(/\*\*(.+?)\*\*/g);
   return (
     <>
@@ -40,7 +45,17 @@ function renderLine(text: string): JSX.Element {
   );
 }
 
-function BulletItem({ rawText, children }: { rawText: string; children: React.ReactNode }) {
+function BulletItem({
+  rawText,
+  children,
+  sourceCardId,
+  sourceCardTitle,
+}: {
+  rawText: string;
+  children: React.ReactNode;
+  sourceCardId?: number;
+  sourceCardTitle?: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   function handleCopy() {
@@ -51,9 +66,21 @@ function BulletItem({ rawText, children }: { rawText: string; children: React.Re
     }
   }
 
+  function handleExplain() {
+    if (sourceCardId === undefined) return;
+    try {
+      (domo as any).navigate(`/kpis/details/${sourceCardId}`, true);
+    } catch {
+      window.open(`/kpis/details/${sourceCardId}`, '_blank');
+    }
+  }
+
+  const explainTitle = sourceCardTitle
+    ? `Open source card: ${sourceCardTitle}`
+    : 'Open source card';
+
   return (
     <li className="bullet-item">
-      <span className="bullet-text">{children}</span>
       <button
         className={`copy-btn${copied ? ' copy-btn-success' : ''}`}
         onClick={handleCopy}
@@ -62,12 +89,72 @@ function BulletItem({ rawText, children }: { rawText: string; children: React.Re
       >
         {copied ? <Check size={14} /> : <Copy size={14} />}
       </button>
+      <span className="bullet-text">{children}</span>
+      {sourceCardId !== undefined && (
+        <span className="explain-wrap">
+          <button
+            className="explain-btn"
+            onClick={handleExplain}
+            aria-label={explainTitle}
+          >
+            <Info size={14} />
+          </button>
+          {sourceCardTitle && (
+            <span className="explain-tooltip" role="tooltip">
+              {sourceCardTitle}
+            </span>
+          )}
+        </span>
+      )}
     </li>
   );
 }
 
-export default function SummaryCard({ narrative }: Props) {
-  const lines = narrative.split('\n').filter((l) => l.trim().length > 0);
+// Reveal ~4 chars per 16ms tick ≈ 250 chars/sec. Feels like ChatGPT streaming.
+const CHARS_PER_TICK = 4;
+const TICK_MS = 16;
+
+function useStreamedText(full: string, enabled: boolean): { text: string; done: boolean } {
+  const [count, setCount] = useState(enabled ? 0 : full.length);
+  const fullRef = useRef(full);
+
+  useEffect(() => {
+    fullRef.current = full;
+    if (!enabled) {
+      setCount(full.length);
+      return;
+    }
+    setCount(0);
+    const id = setInterval(() => {
+      setCount((c) => {
+        const next = c + CHARS_PER_TICK;
+        if (next >= fullRef.current.length) {
+          clearInterval(id);
+          return fullRef.current.length;
+        }
+        return next;
+      });
+    }, TICK_MS);
+    return () => clearInterval(id);
+  }, [full, enabled]);
+
+  return { text: full.slice(0, count), done: count >= full.length };
+}
+
+export default function SummaryCard({ narrative, stream = false, cardRenders }: Props) {
+  const { text: visible, done } = useStreamedText(narrative, stream);
+  const lines = visible.split('\n').filter((l) => l.trim().length > 0);
+
+  const cardTitleById = useMemo(() => {
+    const map = new Map<number, string>();
+    if (cardRenders) {
+      for (const cr of cardRenders) {
+        const title = cr.tableSummary?.cardTitle || cr.title;
+        if (title) map.set(cr.cardId, title);
+      }
+    }
+    return map;
+  }, [cardRenders]);
 
   const elements: JSX.Element[] = [];
   let currentList: JSX.Element[] = [];
@@ -83,10 +170,20 @@ export default function SummaryCard({ narrative }: Props) {
     const line = lines[i].trim();
 
     if (line.startsWith('- ') || line.startsWith('• ')) {
-      const bulletText = line.slice(2);
+      const bulletBody = line.slice(2);
+      const sourceMatch = bulletBody.match(SOURCE_TAG_REGEX);
+      const sourceCardId = sourceMatch ? Number(sourceMatch[1]) : undefined;
+      const bulletText = sourceMatch ? bulletBody.replace(SOURCE_TAG_REGEX, '') : bulletBody;
       const cleanText = bulletText.replace(/\*\*(.+?)\*\*/g, '$1');
+      const sourceCardTitle =
+        sourceCardId !== undefined ? cardTitleById.get(sourceCardId) : undefined;
       currentList.push(
-        <BulletItem key={i} rawText={cleanText}>
+        <BulletItem
+          key={i}
+          rawText={cleanText}
+          sourceCardId={sourceCardId}
+          sourceCardTitle={sourceCardTitle}
+        >
           {renderLine(bulletText)}
         </BulletItem>
       );
@@ -100,7 +197,10 @@ export default function SummaryCard({ narrative }: Props) {
   return (
     <div className="summary-card">
       <h3 className="summary-heading">Summary</h3>
-      <div className="summary-body">{elements}</div>
+      <div className={`summary-body${done ? '' : ' summary-body-streaming'}`}>
+        {elements}
+        {!done && <span className="stream-caret" aria-hidden />}
+      </div>
     </div>
   );
 }

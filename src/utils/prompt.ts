@@ -87,6 +87,7 @@ ${sampleJson}${aggSection}`;
 
         let desc = `### Card: ${ts.cardTitle || cr.title}`;
         if (ts.datasetName) desc += ` (Dataset: ${ts.datasetName})`;
+        desc += `\ncardId: ${cr.cardId}`;
         desc += `\nCard type: ${cr.type}`;
         desc += `\nDisplayed columns: ${colList}`;
         desc += `\nRow count: ${ts.rowCount}`;
@@ -155,9 +156,10 @@ Create a personalized, action-oriented summary tailored to this user's persona. 
 - Every bullet must contain at least one specific data point from the actual data -- no vague statements
 - End with 1-2 bullets under a "Recommended Actions:" line that tell this persona what to do next
 - Use \\n for line breaks between sections
+- **Source tagging:** Append \`[source:<cardId>]\` to the end of every bullet (under both "Key Findings:" and "Recommended Actions:"). Use the numeric \`cardId\` from the "Card Render Data" section above for the single card that most directly supports that insight. Do NOT add source tags to the opening overview sentence or section headers. If no card applies, omit the tag.
 
 Example narrative format:
-"Revenue is trending positively across most regions, but cost pressures in the West need attention.\\n\\n**Key Findings:**\\n- Total revenue reached **$4.8M**, up **+8.2%** from last period\\n- The West region is underperforming at **$890K**, trailing the East by **$340K**\\n- Store revenue accounts for **62%** of total, with web growing fastest at **+15.3%**\\n\\n**Recommended Actions:**\\n- Investigate West region cost drivers -- total costs there are **$1.1M** vs **$780K** East\\n- Double down on web channel marketing given the **+15.3%** growth trend"
+"Revenue is trending positively across most regions, but cost pressures in the West need attention.\\n\\n**Key Findings:**\\n- Total revenue reached **$4.8M**, up **+8.2%** from last period [source:1234567890]\\n- The West region is underperforming at **$890K**, trailing the East by **$340K** [source:2345678901]\\n- Store revenue accounts for **62%** of total, with web growing fastest at **+15.3%** [source:3456789012]\\n\\n**Recommended Actions:**\\n- Investigate West region cost drivers -- total costs there are **$1.1M** vs **$780K** East [source:2345678901]\\n- Double down on web channel marketing given the **+15.3%** growth trend [source:3456789012]"
 
 ## Other rules:
 - Include 3-5 KPIs most relevant to this persona

@@ -35,6 +35,7 @@ export default function App() {
     error,
     fromCache,
     cacheDate,
+    cardRenders,
     followUpHistory,
     followUpLoading,
     regenerate,
@@ -80,8 +81,8 @@ export default function App() {
         </div>
       </div>
 
-      {/* Narrative summary */}
-      <SummaryCard narrative={summary.narrative} />
+      {/* Narrative summary — stream on fresh generations, not from cache */}
+      <SummaryCard narrative={summary.narrative} stream={!fromCache} cardRenders={cardRenders} />
 
       {/* Charts */}
       <ChartGrid charts={summary.charts} />
